@@ -28,6 +28,7 @@ ENV/
 env.bak/
 venv.bak/
 .python-version
+install-pyenv-win.ps1
 
 # Django
 *.log
