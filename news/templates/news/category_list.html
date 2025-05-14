@@ -1,0 +1,31 @@
+{% extends 'news/base.html' %}
+
+{% block title %}Categorias - Portal de Notu00edcias{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">Categorias</h1>
+        
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            {% for category in categories %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ category.name }}</h5>
+                        {% if category.description %}
+                        <p class="card-text">{{ category.description }}</p>
+                        {% endif %}
+                        <a href="{% url 'news_list' %}?category={{ category.slug }}" class="btn btn-primary">Ver Notu00edcias</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">Nenhuma categoria cadastrada.</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

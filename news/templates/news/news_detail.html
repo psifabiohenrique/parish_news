@@ -1,0 +1,73 @@
+{% extends 'news/base.html' %}
+
+{% block title %}{{ news.title }} - Paróquia São Sebastião{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'news_list' %}">Notícias</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'news_list' %}?category={{ news.category.slug }}">{{ news.category.name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ news.title|truncatechars:30 }}</li>
+            </ol>
+        </nav>
+        
+        <article>
+            <header class="mb-4">
+                <h1 class="fw-bold">{{ news.title }}</h1>
+                <div class="text-muted mb-2">
+                    <span>Por {{ news.author.get_full_name|default:news.author.username }}</span>
+                    {% if news.is_published %}
+                    <span class="ms-3">Publicado em {{ news.published_at|date:"d/m/Y H:i" }}</span>
+                    {% else %}
+                    <span class="badge bg-warning ms-3">Nu00e3o publicado</span>
+                    {% endif %}
+                    {% if news.featured %}
+                    <span class="badge bg-success ms-2">Destaque</span>
+                    {% endif %}
+                </div>
+                <div>
+                    <span class="badge bg-primary">{{ news.category.name }}</span>
+                </div>
+            </header>
+            
+            {% if news.cover_image %}
+            <figure class="mb-4">
+                <img class="img-fluid rounded" src="{{ news.cover_image.url }}" alt="{{ news.title }}">
+            </figure>
+            {% endif %}
+            
+            <div class="lead mb-4">{{ news.summary }}</div>
+            
+            <div class="news-content mb-5">
+                {{ news.content|linebreaks }}
+            </div>
+            
+            {% if news.images.exists %}
+            <div class="additional-images mb-5">
+                <h4 class="mb-3">Imagens</h4>
+                <div class="row">
+                    {% for image in news.images.all %}
+                    <div class="col-6 col-md-4 mb-3">
+                        <figure class="figure">
+                            <img src="{{ image.image.url }}" class="figure-img img-fluid rounded" alt="{{ image.caption|default:'' }}">
+                            {% if image.caption %}
+                            <figcaption class="figure-caption">{{ image.caption }}</figcaption>
+                            {% endif %}
+                        </figure>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a href="{% url 'news_list' %}" class="btn btn-outline-primary">Voltar para a lista</a>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+{% endblock %}

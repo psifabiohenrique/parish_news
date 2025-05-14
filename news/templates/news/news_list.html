@@ -1,0 +1,247 @@
+{% extends 'news/base.html' %}
+
+{% block title %}Paróquia São Sebastião - Portal de Notícias{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Conteúdo principal - Aparece primeiro em dispositivos móveis -->
+    <div class="col-md-9 order-md-2">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Notícias</h1>
+            <button class="btn btn-outline-primary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+                <i class="bi bi-funnel"></i> Filtros
+            </button>
+        </div>
+        
+        <!-- Filtros colapsáveis para dispositivos móveis -->
+        <div class="collapse d-md-none mb-4" id="filterCollapse">
+            <div class="card card-body">
+                <form method="get" action="{% url 'news_list' %}">
+                    <div class="mb-3">
+                        <label for="search-mobile" class="form-label">Buscar</label>
+                        <input type="text" class="form-control" id="search-mobile" name="q" value="{{ search_query|default:'' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="category-mobile" class="form-label">Categoria</label>
+                        <select class="form-select" id="category-mobile" name="category">
+                            <option value="">Todas as categorias</option>
+                            {% for category in categories %}
+                            <option value="{{ category.slug }}" {% if current_category == category.slug %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="ordering-mobile" class="form-label">Ordenar por</label>
+                        <select class="form-select" id="ordering-mobile" name="ordering">
+                            <option value="-created_at" {% if ordering == '-created_at' %}selected{% endif %}>Mais recentes</option>
+                            <option value="created_at" {% if ordering == 'created_at' %}selected{% endif %}>Mais antigas</option>
+                            <option value="-published_at" {% if ordering == '-published_at' %}selected{% endif %}>Data de publicação (desc)</option>
+                            <option value="published_at" {% if ordering == 'published_at' %}selected{% endif %}>Data de publicação (asc)</option>
+                            <option value="title" {% if ordering == 'title' %}selected{% endif %}>Título (A-Z)</option>
+                            <option value="-title" {% if ordering == '-title' %}selected{% endif %}>Título (Z-A)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_published-mobile" name="is_published" value="true" 
+                               {% if request.GET.is_published == 'true' %}checked{% endif %}>
+                        <label class="form-check-label" for="is_published-mobile">Apenas publicadas</label>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="featured-mobile" name="featured" value="true"
+                               {% if request.GET.featured == 'true' %}checked{% endif %}>
+                        <label class="form-check-label" for="featured-mobile">Apenas destaques</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                </form>
+            </div>
+        </div>
+        
+        {% if search_query %}
+        <div class="alert alert-info mb-4">
+            Resultados da busca por: <strong>{{ search_query }}</strong>
+        </div>
+        {% endif %}
+        
+        {% if current_category %}
+        <div class="alert alert-info mb-4">
+            Filtrando por categoria: <strong>{{ current_category }}</strong>
+        </div>
+        {% endif %}
+        
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for news in news_list %}
+            <div class="col">
+                <div class="card h-100">
+                    {% if news.cover_image %}
+                    <img src="{{ news.cover_image.url }}" class="card-img-top" alt="{{ news.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ news.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ news.category.name }}</h6>
+                        <p class="card-text">{{ news.summary }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            {% if news.is_published %}
+                            Publicado em {{ news.published_at|date:"d/m/Y" }}
+                            {% else %}
+                            <span class="badge bg-warning">Não publicado</span>
+                            {% endif %}
+                            {% if news.featured %}
+                            <span class="badge bg-success ms-2">Destaque</span>
+                            {% endif %}
+                        </small>
+                        <div class="mt-2">
+                            <a href="{% url 'news_detail' news.slug %}" class="btn btn-primary btn-sm">Ler mais</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">Nenhuma notícia encontrada.</div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if news_list.has_other_pages %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if news_list.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        Primeira
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ news_list.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        Anterior
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Primeira</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Anterior</a>
+                </li>
+                {% endif %}
+                
+                {% for num in news_list.paginator.page_range %}
+                {% if news_list.number == num %}
+                <li class="page-item active">
+                    <a class="page-link" href="#">{{ num }}</a>
+                </li>
+                {% elif num > news_list.number|add:'-3' and num < news_list.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        {{ num }}
+                    </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                
+                {% if news_list.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ news_list.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        Próxima
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ news_list.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                        Última
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Próxima</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Última</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+    
+    <!-- Filtros laterais - Visíveis apenas em desktop -->
+    <div class="col-md-3 order-md-1 d-none d-md-block">
+        <div class="card mb-4">
+            <div class="card-header">Filtros</div>
+            <div class="card-body">
+                <form method="get" action="{% url 'news_list' %}">
+                    <div class="mb-3">
+                        <label for="search" class="form-label">Buscar</label>
+                        <input type="text" class="form-control" id="search" name="q" value="{{ search_query|default:'' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Categoria</label>
+                        <select class="form-select" id="category" name="category">
+                            <option value="">Todas as categorias</option>
+                            {% for category in categories %}
+                            <option value="{{ category.slug }}" {% if current_category == category.slug %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="ordering" class="form-label">Ordenar por</label>
+                        <select class="form-select" id="ordering" name="ordering">
+                            <option value="-created_at" {% if ordering == '-created_at' %}selected{% endif %}>Mais recentes</option>
+                            <option value="created_at" {% if ordering == 'created_at' %}selected{% endif %}>Mais antigas</option>
+                            <option value="-published_at" {% if ordering == '-published_at' %}selected{% endif %}>Data de publicação (desc)</option>
+                            <option value="published_at" {% if ordering == 'published_at' %}selected{% endif %}>Data de publicação (asc)</option>
+                            <option value="title" {% if ordering == 'title' %}selected{% endif %}>Título (A-Z)</option>
+                            <option value="-title" {% if ordering == '-title' %}selected{% endif %}>Título (Z-A)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="true" 
+                               {% if request.GET.is_published == 'true' %}checked{% endif %}>
+                        <label class="form-check-label" for="is_published">Apenas publicadas</label>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="featured" name="featured" value="true"
+                               {% if request.GET.featured == 'true' %}checked{% endif %}>
+                        <label class="form-check-label" for="featured">Apenas destaques</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Adiciona um listener para fechar o colapso de filtros quando um filtro é aplicado em dispositivos móveis
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterCollapse = document.getElementById('filterCollapse');
+        if (filterCollapse) {
+            const filterForm = filterCollapse.querySelector('form');
+            filterForm.addEventListener('submit', function() {
+                // Fecha o colapso após enviar o formulário (apenas em dispositivos móveis)
+                if (window.innerWidth < 768) {
+                    const bsCollapse = new bootstrap.Collapse(filterCollapse);
+                    bsCollapse.hide();
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
