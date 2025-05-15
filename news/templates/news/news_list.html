@@ -1,6 +1,6 @@
 {% extends 'news/base.html' %}
 
-{% block title %}Paróquia São Sebastião - Portal de Notícias{% endblock %}
+{% block title %}Notícias - Paróquia São Sebastião{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -16,7 +16,7 @@
         <!-- Filtros colapsáveis para dispositivos móveis -->
         <div class="collapse d-md-none mb-4" id="filterCollapse">
             <div class="card card-body">
-                <form method="get" action="{% url 'news_list' %}">
+                <form method="get" action="{% url 'news_list' church_slug=church_slug %}">
                     <div class="mb-3">
                         <label for="search-mobile" class="form-label">Buscar</label>
                         <input type="text" class="form-control" id="search-mobile" name="q" value="{{ search_query|default:'' }}">
@@ -99,7 +99,7 @@
                             {% endif %}
                         </small>
                         <div class="mt-2">
-                            <a href="{% url 'news_detail' news.slug %}" class="btn btn-primary btn-sm">Ler mais</a>
+                            <a href="{% url 'news_detail' church_slug=church_slug slug=news.slug %}" class="btn btn-primary btn-sm">Ler mais</a>
                         </div>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
         <div class="card mb-4">
             <div class="card-header">Filtros</div>
             <div class="card-body">
-                <form method="get" action="{% url 'news_list' %}">
+                <form method="get" action="{% url 'news_list' church_slug=church_slug %}">
                     <div class="mb-3">
                         <label for="search" class="form-label">Buscar</label>
                         <input type="text" class="form-control" id="search" name="q" value="{{ search_query|default:'' }}">
@@ -208,7 +208,7 @@
                     </div>
                     
                     <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="true" 
+                        <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="true"
                                {% if request.GET.is_published == 'true' %}checked{% endif %}>
                         <label class="form-check-label" for="is_published">Apenas publicadas</label>
                     </div>
@@ -225,23 +225,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    // Adiciona um listener para fechar o colapso de filtros quando um filtro é aplicado em dispositivos móveis
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterCollapse = document.getElementById('filterCollapse');
-        if (filterCollapse) {
-            const filterForm = filterCollapse.querySelector('form');
-            filterForm.addEventListener('submit', function() {
-                // Fecha o colapso após enviar o formulário (apenas em dispositivos móveis)
-                if (window.innerWidth < 768) {
-                    const bsCollapse = new bootstrap.Collapse(filterCollapse);
-                    bsCollapse.hide();
-                }
-            });
-        }
-    });
-</script>
 {% endblock %}

@@ -11,25 +11,23 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">Paróquia São Sebastião</a>
+            <a class="navbar-brand" href="{% url 'home' church_slug=church.slug %}">Paróquia São Sebastião</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <!-- Atualizar quando construir a rota pároco -->
-                        <a class="nav-link" href="{% url 'home' %}">Pároco</a> 
+                        <a class="nav-link" href="{% url 'priest' church_slug=church_slug %}">Pároco</a> 
                     </li>
                     <li class="nav-item">
-                        <!-- Atualizar quando construir a rota sobre -->
-                        <a class="nav-link" href="{% url 'home' %}">Sobre</a> 
+                        <a class="nav-link" href="{% url 'about' church_slug=church_slug %}">Sobre</a> 
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'news_list' %}">Todas as Notícias</a>
+                        <a class="nav-link" href="{% url 'news_list' church_slug=church_slug %}">Todas as Notícias</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'category_list' %}">Categorias</a>
+                        <a class="nav-link" href="{% url 'category_list' church_slug=church_slug %}">Categorias</a>
                     </li>
                 </ul>
             </div>

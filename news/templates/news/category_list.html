@@ -1,6 +1,6 @@
 {% extends 'news/base.html' %}
 
-{% block title %}Categorias - Portal de Notu00edcias{% endblock %}
+{% block title %}Categorias - Paróquia São Sebastião{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -16,7 +16,7 @@
                         {% if category.description %}
                         <p class="card-text">{{ category.description }}</p>
                         {% endif %}
-                        <a href="{% url 'news_list' %}?category={{ category.slug }}" class="btn btn-primary">Ver Notu00edcias</a>
+                        <a href="{% url 'news_list' church_slug=church_slug %}?category={{ category.slug }}" class="btn btn-primary">Ver Notícias</a>
                     </div>
                 </div>
             </div>

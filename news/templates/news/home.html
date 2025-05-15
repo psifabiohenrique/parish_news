@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="row">
-    <!-- Setu00e7u00e3o de Destaques -->
+    <!-- Sessão de Destaques -->
     {% if featured_news %}
     <div class="col-12 mb-5">
         <h2 class="mb-4">Destaques</h2>
@@ -27,7 +27,7 @@
                     <div class="carousel-caption d-none d-md-block" style="background-color: rgba(0,0,0,0.5); padding: 20px;">
                         <h3>{{ news.title }}</h3>
                         <p>{{ news.summary|truncatechars:150 }}</p>
-                        <a href="{% url 'news_detail' news.slug %}" class="btn btn-primary">Ler mais</a>
+                        <a href="{% url 'news_detail' church_slug=church_slug slug=news.slug %}" class="btn btn-primary">Ler mais</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -44,7 +44,7 @@
     </div>
     {% endif %}
     
-    <!-- Setu00e7u00e3o Principal -->
+    <!-- Sessão Principal -->
     <div class="col-md-8">
         <h2 class="mb-4">Últimas Notícias</h2>
         
@@ -69,7 +69,7 @@
                             <span class="badge bg-success ms-1">Destaque</span>
                             {% endif %}
                         </p>
-                        <a href="{% url 'news_detail' news.slug %}" class="btn btn-primary btn-sm">Ler mais</a>
+                        <a href="{% url 'news_detail' church_slug=church_slug slug=news.slug %}" class="btn btn-primary btn-sm">Ler mais</a>
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
         {% endfor %}
         
         <div class="text-center mt-4">
-            <a href="{% url 'news_list' %}" class="btn btn-outline-primary">Ver todas as notícias</a>
+            <a href="{% url 'news_list' church_slug=church_slug %}" class="btn btn-outline-primary">Ver todas as notícias</a>
         </div>
     </div>
     
@@ -91,7 +91,7 @@
                 <ul class="list-group list-group-flush">
                     {% for category in categories %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{% url 'news_list' %}?category={{ category.slug }}" class="text-decoration-none">{{ category.name }}</a>
+                        <a href="{% url 'news_list' church_slug=church_slug %}?category={{ category.slug }}" class="text-decoration-none">{{ category.name }}</a>
                         <span class="badge bg-primary rounded-pill">{{ category.news.count }}</span>
                     </li>
                     {% empty %}
@@ -104,9 +104,9 @@
         <div class="card">
             <div class="card-header">Busca</div>
             <div class="card-body">
-                <form action="{% url 'news_list' %}" method="get">
+                <form action="{% url 'news_list' church_slug=church_slug %}" method="get">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Buscar notu00edcias..." name="q">
+                        <input type="text" class="form-control" placeholder="Buscar Notícias..." name="q">
                         <button class="btn btn-primary" type="submit">Buscar</button>
                     </div>
                 </form>
