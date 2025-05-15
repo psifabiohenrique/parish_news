@@ -40,12 +40,6 @@ class User(AbstractUser):
         verbose_name = "Usuário"
         verbose_name_plural = "Usuários"
         ordering = ["-date_joined"]
-        permissions = [
-            ("can_manage_news", "Pode gerenciar notícias"),
-            ("can_publish_news", "Pode publicar notícias"),
-            ("can_manage_categories", "Pode gerenciar categorias"),
-            ("can_manage_images", "Pode gerenciar imagens"),
-        ]
 
     def save(self, *args, **kwargs):
         if not self.is_superuser and not self.church:
