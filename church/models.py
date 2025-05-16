@@ -44,8 +44,8 @@ class Church(models.Model):
     website = models.URLField("Website", blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Church'
-        verbose_name_plural = 'Churches'
+        verbose_name = 'Igreja'
+        verbose_name_plural = 'Igrejas'
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -74,6 +74,10 @@ class Priest(models.Model):
     active = models.BooleanField("Ativo", default=True)
     created_at = models.DateTimeField("Criado em", auto_now_add=True)
     updated_at = models.DateTimeField("Atualizado em", auto_now=True)
+
+    class Meta:
+        verbose_name = "Padre"
+        verbose_name_plural = "Padres"
 
     def __str__(self):
         return f"{self.title} {self.name} - {self.church.name}"
