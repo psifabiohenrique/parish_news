@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'news_list' church_slug=church_slug %}">Notícias</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'news_list' church_slug=church_slug %}?category={{ news.category.slug }}">{{ news.category.name }}</a></li>ategory.name }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'news_list' church_slug=church_slug %}?category={{ news.category.slug }}">{{ news.category.name }}</a></li></a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ news.title|truncatechars:30 }}</li>
             </ol>
         </nav>

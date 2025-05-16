@@ -4,8 +4,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import News, Category
 from church.models import Church, Priest
 
-# Create your views here.
-
 
 def home(request, church_slug):
     church = get_object_or_404(Church, slug=church_slug)
@@ -110,7 +108,11 @@ def news_detail(request, church_slug, slug):
     """View para exibir detalhes de uma notícia"""
     news = get_object_or_404(News, slug=slug)
     church = get_object_or_404(Church, slug=church_slug)
-    return render(request, "news/news_detail.html", {"news": news, "church": church})
+    return render(
+        request,
+        "news/news_detail.html",
+        {"news": news, "church": church, "church_slug": church_slug},
+    )
 
 
 def published_news_list(request, church_slug):
@@ -164,6 +166,7 @@ def published_news_list(request, church_slug):
             "current_category": category_slug,
             "search_query": search_query,
             "ordering": ordering,
+            "church_slug": church_slug,
         },
     )
 
