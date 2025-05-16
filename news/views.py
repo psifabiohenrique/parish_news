@@ -9,14 +9,16 @@ from church.models import Church, Priest
 
 def home(request, church_slug):
     church = get_object_or_404(Church, slug=church_slug)
-    
+
     # Buscar noticias em destaque
-    featured_news = News.objects.filter(is_published=True, featured=True, church__slug=church_slug).order_by(
-        "-published_at"
-    )[:5]
+    featured_news = News.objects.filter(
+        is_published=True, featured=True, church__slug=church_slug
+    ).order_by("-published_at")[:5]
 
     # Buscar notícias recentes
-    recent_news = News.objects.filter(is_published=True, church__slug=church_slug).order_by("-published_at")[:10]
+    recent_news = News.objects.filter(
+        is_published=True, church__slug=church_slug
+    ).order_by("-published_at")[:10]
 
     # Buscar categorias
     categories = Category.objects.filter(church__slug=church_slug)
@@ -38,17 +40,17 @@ def category_list(request, church_slug):
     """View para listar todas as categorias"""
     church = get_object_or_404(Church, slug=church_slug)
     categories = Category.objects.filter(church__slug=church_slug)
-    return render(request, "news/category_list.html", {
-        "categories": categories,
-        "church": church,
-        "church_slug": church_slug
-    })
+    return render(
+        request,
+        "news/category_list.html",
+        {"categories": categories, "church": church, "church_slug": church_slug},
+    )
 
 
 def news_list(request, church_slug):
     """View para listar todas as notícias (com filtros)"""
     church = get_object_or_404(Church, slug=church_slug)
-    
+
     # Inicializa o queryset base
     queryset = News.objects.filter(is_published=True, church__slug=church_slug)
 
@@ -169,11 +171,17 @@ def published_news_list(request, church_slug):
 def about(request, church_slug):
     """View para a página sobre a paróquia"""
     church = get_object_or_404(Church, slug=church_slug)
-    return render(request, "news/about.html", {"church": church, "church_slug": church_slug})
+    return render(
+        request, "news/about.html", {"church": church, "church_slug": church_slug}
+    )
 
 
 def priest(request, church_slug):
     """View para a página do pároco"""
     church = get_object_or_404(Church, slug=church_slug)
     queryset = Priest.objects.filter(church__slug=church_slug)
-    return render(request, "news/priest.html", {"priests": queryset, "church": church, "church_slug": church_slug})
+    return render(
+        request,
+        "news/priest.html",
+        {"priests": queryset, "church": church, "church_slug": church_slug},
+    )

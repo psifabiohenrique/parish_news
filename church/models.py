@@ -29,6 +29,9 @@ class Church(models.Model):
 
     name = models.CharField("Nome", max_length=255)
     slug = models.SlugField("Slug", unique=True, max_length=255)
+    phone = models.CharField("Telefone", max_length=20, blank=True, null=True)
+    email = models.EmailField("Email", max_length=255, blank=True, null=True)
+    opening_hours = models.TextField("Horário de Funcionamento", blank=True, null=True)
     history = models.TextField("História", blank=True, null=True)
     patron = models.TextField("Padroeiro", blank=True, null=True)
     mass_schedule = models.TextField("Horário das Missas", blank=True, null=True)
@@ -36,6 +39,7 @@ class Church(models.Model):
     pastorals_movement = models.TextField(
         "Pastorais e Movimentos", blank=True, null=True
     )
+    confessions = models.TextField("Confissões e atendimentos", blank=True, null=True)
 
     website = models.URLField("Website", blank=True, null=True)
 
@@ -56,7 +60,10 @@ class Priest(models.Model):
     church = models.ForeignKey(Church, on_delete=models.CASCADE, related_name="priests")
     name = models.CharField("Nome", max_length=255)
     slug = models.SlugField("Slug", unique=True, max_length=255)
-    title = models.CharField("Título", max_length=255, blank=True, null=True)
+    title = models.CharField("Título (padre, bispo, etc.)", max_length=255, blank=True, null=True)
+    function = models.CharField("Função (pároco, vigário, etc.)", max_length=255, blank=True, null=True)
+    history = models.TextField("Formação e Trajetória", blank=True, null=True)
+    message = models.TextField("Mensagem para a comunidade", blank=True, null=True)
     photo = models.ImageField(
         "Foto",
         upload_to=get_file_path,

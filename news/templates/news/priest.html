@@ -1,21 +1,25 @@
 {% extends 'news/base.html' %}
 
-{% block title %}Nosso Pároco - Paróquia São Sebastião{% endblock %}
+{% block title %}Nosso Pároco - Paróquia {{ church.name }}{% endblock %}
 
 {% block content %}
+
+{% if priests %}
+
+{% for priest in priests %}
 <div class="container">
-    <h1 class="mb-4">Nosso Pároco</h1>
+    <h1 class="mb-4">{{ priest.function }}</h1>
 
     <div class="row">
         <div class="col-md-8">
             <div class="card mb-4">
                 <div class="card-body">
-                    <h2 class="card-title h4">Pe. [Nome do Pároco]</h2>
-                    <p class="card-text">
+                    <h2 class="card-title h4">{{ priest.title }} {{ priest.name }}</h2>
+                    <!-- <p class="card-text">
                         Ordenado sacerdote em [ano de ordenação], Pe. [Nome] tem dedicado sua vida ao serviço 
                         de Deus e da Igreja. Desde [ano] está à frente da Paróquia São Sebastião, conduzindo 
                         nossa comunidade com dedicação e amor pastoral.
-                    </p>
+                    </p> -->
                 </div>
             </div>
 
@@ -23,10 +27,7 @@
                 <div class="card-body">
                     <h2 class="card-title h4">Formação e Trajetória</h2>
                     <p class="card-text">
-                        • Graduação em Teologia pela [Instituição]<br>
-                        • Especialização em [Área]<br>
-                        • [X] anos de experiência pastoral<br>
-                        • Atuação em diversas paróquias da diocese
+                        {{ priest.history }}
                     </p>
                 </div>
             </div>
@@ -36,40 +37,25 @@
                     <h2 class="card-title h4">Mensagem do Pároco</h2>
                     <blockquote class="blockquote">
                         <p class="mb-0">
-                            "Como pároco da Paróquia São Sebastião, convido todos a fazerem parte 
-                            desta comunidade viva e atuante. Juntos, podemos construir uma Igreja 
-                            mais acolhedora e evangelizadora, levando a mensagem de Cristo a todos."
+                            {{ priest.message }}
                         </p>
-                        <footer class="blockquote-footer mt-2">Pe. [Nome do Pároco]</footer>
+                        <footer class="blockquote-footer mt-2">{{ priest.title }} {{ priest.name }}</footer>
                     </blockquote>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title h4">Atendimento e Confissões</h2>
-                    <p class="card-text">
-                        <strong>Horário de Atendimento na Secretaria:</strong><br>
-                        • Terça a Sexta: 14h00 às 17h00<br>
-                        <br>
-                        <strong>Confissões:</strong><br>
-                        • Quartas e Sextas: 16h00 às 18h00<br>
-                        • Sábados: 15h00 às 17h00<br>
-                        • Ou mediante agendamento
-                    </p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
+{% endfor %}
+
+        <!-- <div class="col-md-4">
             <div class="card mb-4">
                 <div class="card-body">
                     <h2 class="card-title h4">Contato</h2>
                     <p class="card-text">
-                        <i class="bi bi-telephone"></i> [Telefone da Secretaria]<br>
-                        <i class="bi bi-envelope"></i> [Email]<br>
+                        <i class="bi bi-telephone"></i> {{ church.phone }}<br>
+                        <i class="bi bi-envelope"></i> {{ church.email }}<br>
                         <i class="bi bi-clock"></i> Horário de Atendimento<br>
-                        Segunda a Sexta: 8h às 17h
+                        {{ church.opening_hours }}
                     </p>
                 </div>
             </div>
@@ -85,6 +71,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
+
+{% endif %}
 {% endblock %}

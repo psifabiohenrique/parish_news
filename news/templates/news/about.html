@@ -4,24 +4,22 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="mb-4">Sobre a Paróquia São Sebastião</h1>
+    <h1 class="mb-4">Sobre a {{ church.name }}</h1>
     
     <div class="card mb-4">
         <div class="card-body">
             <h2 class="card-title h4">Nossa História</h2>
             <p class="card-text">
-                A Paróquia São Sebastião tem uma rica história de serviço à comunidade. Fundada em [ano de fundação], 
-                nossa paróquia tem sido um farol de fé e esperança para os fiéis da região.
+                {{ church.history }}
             </p>
         </div>
     </div>
 
     <div class="card mb-4">
         <div class="card-body">
-            <h2 class="card-title h4">Nossa Missão</h2>
+            <h2 class="card-title h4">Padroeiro(a)</h2>
             <p class="card-text">
-                Nossa missão é servir a Deus e à comunidade, promovendo os valores cristãos, a solidariedade 
-                e o amor ao próximo. Buscamos ser um espaço de acolhimento, oração e evangelização.
+                {{ church.patron }}
             </p>
         </div>
     </div>
@@ -29,11 +27,18 @@
     <div class="card mb-4">
         <div class="card-body">
             <h2 class="card-title h4">Horários de Missa</h2>
-            <ul class="list-unstyled">
-                <li><strong>Segunda a Sexta:</strong> 19h00</li>
-                <li><strong>Sábado:</strong> 19h00 (Missa Vespertina)</li>
-                <li><strong>Domingo:</strong> 7h00, 9h30 e 19h00</li>
-            </ul>
+            <p class="card-text">
+                {{ church.mass_schedule }}
+            </p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title h4">Confissões e Atendimentos</h2>
+            <p class="card-text">
+                {{ church.confessions }}
+            </p>
         </div>
     </div>
 
@@ -41,9 +46,7 @@
         <div class="card-body">
             <h2 class="card-title h4">Localização e Contato</h2>
             <p class="card-text">
-                <i class="bi bi-geo-alt"></i> [Endereço da Paróquia]<br>
-                <i class="bi bi-telephone"></i> [Telefone]<br>
-                <i class="bi bi-envelope"></i> [Email]
+                {{ church.location_contact }}
             </p>
         </div>
     </div>
@@ -52,22 +55,9 @@
         <div class="card-body">
             <h2 class="card-title h4">Pastorais e Movimentos</h2>
             <div class="row">
-                <div class="col-md-6">
-                    <ul class="list-unstyled">
-                        <li>• Pastoral da Catequese</li>
-                        <li>• Pastoral da Liturgia</li>
-                        <li>• Pastoral do Dízimo</li>
-                        <li>• Pastoral Familiar</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <ul class="list-unstyled">
-                        <li>• Grupo de Jovens</li>
-                        <li>• Apostolado da Oração</li>
-                        <li>• Ministros Extraordinários da Comunhão</li>
-                        <li>• Pastoral Social</li>
-                    </ul>
-                </div>
+                <p class="card-text">
+                    {{ church.pastorals_movement }}
+                </p>
             </div>
         </div>
     </div>

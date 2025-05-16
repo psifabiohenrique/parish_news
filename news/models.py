@@ -32,7 +32,7 @@ class Category(models.Model):
     """
 
     name = models.CharField("Nome", max_length=100)
-    slug = models.SlugField("Slug", unique=True)
+    slug = models.SlugField("Slug")
     description = models.TextField("Descrição", blank=True)
 
     church = models.ForeignKey(
