@@ -48,33 +48,38 @@ class CustomUserAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("username", "password1", "password2", "is_staff", "groups"),
+                "fields": ("username", "password1", "password2", "church", "is_staff", "groups"),
             },
         ),
     )
     readonly_fields = ("avatar_preview",)
 
     def save_model(self, request, obj, form, change):
-        if not change:
-            # Se for um novo usuário, atribua a igreja do usuário logado
+        if not change:  # Se for um novo usuário
             if not request.user.is_superuser:
                 obj.church = request.user.church
+            elif not obj.is_superuser and not obj.church:
+                # Se for superuser criando um usuário não-superuser, valida a igreja
+                raise ValueError("Usuários não-administradores devem estar vinculados a uma igreja")
         super().save_model(request, obj, form, change)
 
     def get_fieldsets(self, request, obj=None):
-        fieldsets = super().get_fieldsets(request, obj)
-        # Se não for superuser, remove os campos sensíveis
-        if not request.user.is_superuser:
-            new_fieldsets = []
-            for name, opts in fieldsets:
-                fields = list(opts.get("fields", []))
-                # Remove campos sensíveis
-                for sensitive in ["is_superuser", "user_permissions", "church"]:
-                    if sensitive in fields:
-                        fields.remove(sensitive)
-                new_fieldsets.append((name, {"fields": fields}))
-            return new_fieldsets
-        return fieldsets
+        if not obj:  # Caso seja criação de novo usuário
+            if request.user.is_superuser:
+                return (
+                    (None, {
+                        'classes': ('wide',),
+                        'fields': ('username', 'password1', 'password2', 'church', 'is_staff', 'groups'),
+                    }),
+                )
+            else:
+                return (
+                    (None, {
+                        'classes': ('wide',),
+                        'fields': ('username', 'password1', 'password2', 'is_staff', 'groups'),
+                    }),
+                )
+        return super().get_fieldsets(request, obj)
 
     def get_readonly_fields(self, request, obj=None):
         readonly = list(super().get_readonly_fields(request, obj))
