@@ -1,29 +1,9 @@
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
-import uuid
-import os
-from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 
 User = get_user_model()
-
-
-def get_file_path(instance, filename):
-    ext = filename.split(".")[-1]
-    filename = f"{uuid.uuid4().hex}.{ext}"
-
-    if isinstance(instance, News):
-        return os.path.join("news/covers", filename)
-    return os.path.join("news/images", filename)
-
-
-def validate_image_file(value):
-    ext = os.path.splitext(value.name)[1]
-    valid_extensions = [".jpg", ".jpeg", ".png", ".gif"]
-    if not ext.lower() in valid_extensions:  # noqa: E713
-        raise ValidationError(
-            "Formato de arquivo não suportado. Use JPG, JPEG, PNG ou GIF."
-        )
 
 
 class Category(models.Model):
@@ -76,12 +56,13 @@ class News(models.Model):
         User, verbose_name="Autor", on_delete=models.PROTECT, related_name="news"
     )
 
-    cover_image = models.ImageField(
-        "Imagem de Capa",
-        upload_to=get_file_path,
-        validators=[validate_image_file],
+    cover_image = models.URLField(
+        "URL da Imagem de Capa",
+        max_length=500,
+        validators=[URLValidator()],
         blank=True,
         null=True,
+        help_text="Insira a URL da imagem de capa"
     )
 
     is_published = models.BooleanField(
@@ -135,10 +116,11 @@ class Image(models.Model):
         News, verbose_name="Notícia", on_delete=models.CASCADE, related_name="images"
     )
 
-    image = models.ImageField(
-        'Imagem',
-        upload_to=get_file_path,
-        validators=[validate_image_file]
+    image = models.URLField(
+        'URL da Imagem',
+        max_length=500,
+        validators=[URLValidator()],
+        help_text="Insira a URL da imagem"
     )
 
     caption = models.CharField("Legenda", max_length=200, blank=True)

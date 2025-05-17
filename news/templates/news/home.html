@@ -20,7 +20,7 @@
                 {% for news in featured_news %}
                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
                     {% if news.cover_image %}
-                    <img src="{{ news.cover_image.url }}" class="d-block w-100" alt="{{ news.title }}" style="height: 400px; object-fit: cover;">
+                    <img src="{{ news.cover_image }}" class="d-block w-100" alt="{{ news.title }}" style="height: 400px; object-fit: cover;">
                     {% else %}
                     <div class="bg-light d-block w-100" style="height: 400px;"></div>
                     {% endif %}
@@ -53,7 +53,7 @@
             <div class="row g-0">
                 <div class="col-md-4">
                     {% if news.cover_image %}
-                    <img src="{{ news.cover_image.url }}" class="img-fluid rounded-start h-100 object-fit-cover" alt="{{ news.title }}">
+                    <img src="{{ news.cover_image }}" class="img-fluid rounded-start h-100 object-fit-cover" alt="{{ news.title }}">
                     {% else %}
                     <div class="bg-light h-100" style="min-height: 200px;"></div>
                     {% endif %}

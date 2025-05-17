@@ -22,20 +22,63 @@ class PriestAdmin(admin.ModelAdmin):
     search_fields = ("name", "church__name")
     fieldsets = (
         # (None, {"fields": {"name"}}),
-        ("Informações do padre",
-        {
-            "fields": (
-                "name",
-                "slug",
-                "title",
-                "function",
-                "history",
-                "message",
-                "photo",
-                "active",
-            )
-        }),
+        (
+            "Informações do padre",
+            {
+                "fields": (
+                    "name",
+                    "slug",
+                    "title",
+                    "function",
+                    "history",
+                    "message",
+                    "photo",
+                    "active",
+                )
+            },
+        ),
     )
+
+    def get_fieldsets(self, request, obj=None):
+        if not obj:  # Caso seja criação de novo usuário
+            if request.user.is_superuser:
+                return (
+                    (
+                        "Informações do padre",
+                        {
+                            "fields": (
+                                "name",
+                                "slug",
+                                "title",
+                                "function",
+                                "history",
+                                "message",
+                                "photo",
+                                "active",
+                                "church",
+                            )
+                        },
+                    ),
+                )
+            else:
+                return (
+                    (
+                        "Informações do padre",
+                        {
+                            "fields": (
+                                "name",
+                                "slug",
+                                "title",
+                                "function",
+                                "history",
+                                "message",
+                                "photo",
+                                "active",
+                            )
+                        },
+                    ),
+                )
+        return super().get_fieldsets(request, obj)
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)

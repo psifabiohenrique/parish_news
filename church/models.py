@@ -1,27 +1,6 @@
 from django.db import models
-import uuid
-import os
-from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 from django.utils.text import slugify
-
-
-# Create your models here.
-def get_file_path(instance, filename):
-    ext = filename.split(".")[-1]
-    filename = f"{uuid.uuid4().hex}.{ext}"
-
-    if isinstance(instance, Priest):
-        return os.path.join("priest/image", filename)
-    return os.path.join("priest/images", filename)
-
-
-def validate_image_file(value):
-    ext = os.path.splitext(value.name)[1]
-    valid_extensions = [".jpg", ".jpeg", ".png", ".gif"]
-    if not ext.lower() in valid_extensions:  # noqa: E713
-        raise ValidationError(
-            "Formato de arquivo não suportado. Use JPG, JPEG, PNG ou GIF."
-        )
 
 
 class Church(models.Model):
@@ -44,14 +23,14 @@ class Church(models.Model):
     website = models.URLField("Website", blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Igreja'
-        verbose_name_plural = 'Igrejas'
-    
+        verbose_name = "Igreja"
+        verbose_name_plural = "Igrejas"
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-    
+
     def __str__(self):
         return self.name
 
@@ -60,14 +39,18 @@ class Priest(models.Model):
     church = models.ForeignKey(Church, on_delete=models.CASCADE, related_name="priests")
     name = models.CharField("Nome", max_length=255)
     slug = models.SlugField("Slug", unique=True, max_length=255)
-    title = models.CharField("Título (padre, bispo, etc.)", max_length=255, blank=True, null=True)
-    function = models.CharField("Função (pároco, vigário, etc.)", max_length=255, blank=True, null=True)
+    title = models.CharField(
+        "Título (padre, bispo, etc.)", max_length=255, blank=True, null=True
+    )
+    function = models.CharField(
+        "Função (pároco, vigário, etc.)", max_length=255, blank=True, null=True
+    )
     history = models.TextField("Formação e Trajetória", blank=True, null=True)
     message = models.TextField("Mensagem para a comunidade", blank=True, null=True)
-    photo = models.ImageField(
-        "Foto",
-        upload_to=get_file_path,
-        validators=[validate_image_file],
+    photo = models.URLField(
+        "Foto do padre",
+        max_length=1000,
+        validators=[URLValidator()],
         blank=True,
         null=True,
     )
@@ -81,4 +64,3 @@ class Priest(models.Model):
 
     def __str__(self):
         return f"{self.title} {self.name} - {self.church.name}"
-        

@@ -21,7 +21,7 @@
                     {% if news.is_published %}
                     <span class="ms-3">Publicado em {{ news.published_at|date:"d/m/Y H:i" }}</span>
                     {% else %}
-                    <span class="badge bg-warning ms-3">Nu00e3o publicado</span>
+                    <span class="badge bg-warning ms-3">Não publicado</span>
                     {% endif %}
                     {% if news.featured %}
                     <span class="badge bg-success ms-2">Destaque</span>
@@ -34,7 +34,7 @@
             
             {% if news.cover_image %}
             <figure class="mb-4">
-                <img class="img-fluid rounded" src="{{ news.cover_image.url }}" alt="{{ news.title }}">
+                <img class="img-fluid rounded" src="{{ news.cover_image }}" alt="{{ news.title }}">
             </figure>
             {% endif %}
             
@@ -51,7 +51,7 @@
                     {% for image in news.images.all %}
                     <div class="col-6 col-md-4 mb-3">
                         <figure class="figure">
-                            <img src="{{ image.image.url }}" class="figure-img img-fluid rounded" alt="{{ image.caption|default:'' }}">
+                            <img src="{{ image.image }}" class="figure-img img-fluid rounded" alt="{{ image.caption|default:'' }}">
                             {% if image.caption %}
                             <figcaption class="figure-caption">{{ image.caption }}</figcaption>
                             {% endif %}

@@ -13,7 +13,7 @@ class ImageInline(admin.TabularInline):
 
     def image_preview(self, obj):
         if obj.image:
-            return format_html('<img src="{}" width="200" />', obj.image.url)
+            return format_html('<img src="{}" width="200" />', obj.image)
         return "Sem imagem"
 
     image_preview.short_description = "Preview"
@@ -68,7 +68,7 @@ class NewsAdmin(admin.ModelAdmin):
 
     def image_preview(self, obj):
         if obj.cover_image:
-            return format_html('<img src="{}" width="200" />', obj.cover_image.url)
+            return format_html('<img src="{}" width="200" />', obj.cover_image)
         return "Sem imagem"
 
     image_preview.short_description = "Preview"
@@ -99,7 +99,7 @@ class ImageAdmin(admin.ModelAdmin):
 
     def image_preview(self, obj):
         if obj.image:
-            return format_html('<img src="{}" width="200" />', obj.image.url)
+            return format_html('<img src="{}" width="200" />', obj.image)
         return "Sem imagem"
 
     image_preview.short_description = "Preview"

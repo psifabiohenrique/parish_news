@@ -80,7 +80,7 @@
             <div class="col">
                 <div class="card h-100">
                     {% if news.cover_image %}
-                    <img src="{{ news.cover_image.url }}" class="card-img-top" alt="{{ news.title }}">
+                    <img src="{{ news.cover_image }}" class="card-img-top" alt="{{ news.title }}">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ news.title }}</h5>
