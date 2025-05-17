@@ -15,11 +15,9 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h2 class="card-title h4">{{ priest.title }} {{ priest.name }}</h2>
-                    <!-- <p class="card-text">
-                        Ordenado sacerdote em [ano de ordenação], Pe. [Nome] tem dedicado sua vida ao serviço 
-                        de Deus e da Igreja. Desde [ano] está à frente da Paróquia São Sebastião, conduzindo 
-                        nossa comunidade com dedicação e amor pastoral.
-                    </p> -->
+                    <figure class="mb-4">
+                        <img class="img-fluid rounded" src="{{ priest.photo }}" alt="{{ priest.name }}">
+                    </figure>
                 </div>
             </div>
 
@@ -47,31 +45,6 @@
 
 {% endfor %}
 
-        <!-- <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h2 class="card-title h4">Contato</h2>
-                    <p class="card-text">
-                        <i class="bi bi-telephone"></i> {{ church.phone }}<br>
-                        <i class="bi bi-envelope"></i> {{ church.email }}<br>
-                        <i class="bi bi-clock"></i> Horário de Atendimento<br>
-                        {{ church.opening_hours }}
-                    </p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title h4">Agenda Pastoral</h2>
-                    <p class="card-text">
-                        Para agendar uma visita pastoral, bênção de casa, 
-                        ou outro atendimento específico, entre em contato 
-                        com a secretaria paroquial.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </div>
 
 {% endif %}
