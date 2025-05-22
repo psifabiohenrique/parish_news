@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -57,8 +59,13 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "church.middleware.ChurchMiddleware",
 ]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = "paroquianews.urls"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.fly.dev"
+]
 
 TEMPLATES = [
     {
@@ -87,14 +94,16 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
-    "default": {
-        "ENGINE": os.getenv("ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.getenv("DB_NAME", "db.sqlite3"),
-        "USER": os.getenv("DB_USER", None),
-        "PASSWORD": os.getenv("DB_PASSWORD", None),
-        "HOST": os.getenv("DB_HOST", None),
-        "PORT": os.getenv("DB_PORT", None),
-    }
+    # "default": {
+    #     "ENGINE": os.getenv("ENGINE", "django.db.backends.sqlite3"),
+    #     "NAME": os.getenv("DB_NAME", "db.sqlite3"),
+    #     "USER": os.getenv("DB_USER", None),
+    #     "PASSWORD": os.getenv("DB_PASSWORD", None),
+    #     "HOST": os.getenv("DB_HOST", None),
+    #     "PORT": os.getenv("DB_PORT", None),
+    # }
+
+    "default": dj_database_url.config(default=os.getenv("DATABASE_URL"), conn_max_age=600)
 }
 
 
