@@ -89,22 +89,25 @@ WSGI_APPLICATION = "paroquianews.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-    # "default": {
-    #     "ENGINE": os.getenv("ENGINE", "django.db.backends.sqlite3"),
-    #     "NAME": os.getenv("DB_NAME", "db.sqlite3"),
-    #     "USER": os.getenv("DB_USER", None),
-    #     "PASSWORD": os.getenv("DB_PASSWORD", None),
-    #     "HOST": os.getenv("DB_HOST", None),
-    #     "PORT": os.getenv("DB_PORT", None),
-    # }
 
-    "default": dj_database_url.config(default=os.getenv("DATABASE_URL"), conn_max_age=600)
-}
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": os.getenv("ENGINE", "django.db.backends.sqlite3"),
+            "NAME": os.getenv("DB_NAME", "db.sqlite3"),
+            "USER": os.getenv("DB_USER", None),
+            "PASSWORD": os.getenv("DB_PASSWORD", None),
+            "HOST": os.getenv("DB_HOST", None),
+            "PORT": os.getenv("DB_PORT", None),
+        }
+
+    }
+else:
+    # Em produção
+    DATABASES = {
+        "default": dj_database_url.config(default=os.getenv("DATABASE_URL"), conn_max_age=600)
+    }
+
 
 
 # Password validation
