@@ -14,7 +14,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ category.name }}</h5>
                         {% if category.description %}
-                        <p class="card-text">{{ category.description }}</p>
+                        <p class="card-text">{{ category.description|linebreaks }}</p>
                         {% endif %}
                         <a href="{% url 'news_list' church_slug=church_slug %}?category={{ category.slug }}" class="btn btn-church-primary">Ver Notícias</a>
                     </div>

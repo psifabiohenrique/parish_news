@@ -29,7 +29,7 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text">
-                        {{ priest.history }}
+                        {{ priest.history|linebreaks }}
                     </p>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                 <div class="card-body">
                     <blockquote class="blockquote blockquote-church">
                         <p class="mb-0">
-                            {{ priest.message }}
+                            {{ priest.message|linebreaks }}
                         </p>
                         <footer class="blockquote-footer mt-2">{{ priest.title }} {{ priest.name }}</footer>
                     </blockquote>
