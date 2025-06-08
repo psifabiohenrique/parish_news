@@ -21,6 +21,7 @@ RUN uv sync
 COPY . /code
 
 ENV SECRET_KEY "gRhoM1F0xnxe02g4npp3AEvsYmytq2ELNGvMpA5XSsD6cU7GUK"
+RUN uv run python manage.py migrate
 RUN uv run python manage.py collectstatic --noinput
 
 EXPOSE 8000
