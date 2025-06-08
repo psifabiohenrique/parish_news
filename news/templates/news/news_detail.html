@@ -7,8 +7,8 @@
     <div class="col-lg-8 mx-auto">
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'news_list' church_slug=church_slug %}">Notícias</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'news_list' church_slug=church_slug %}?category={{ news.category.slug }}">{{ news.category.name }}</a></li></a></li>
+                <li class="breadcrumb-item"><a href="{% url 'news_list' church_slug=church_slug %}" class="link-church-primary">Notícias</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'news_list' church_slug=church_slug %}?category={{ news.category.slug }}" class="link-church-primary">{{ news.category.name }}</a></li></a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ news.title|truncatechars:30 }}</li>
             </ol>
         </nav>
@@ -24,11 +24,11 @@
                     <span class="badge bg-warning ms-3">Não publicado</span>
                     {% endif %}
                     {% if news.featured %}
-                    <span class="badge bg-success ms-2">Destaque</span>
+                    <span class="badge badge-church-secondary ms-2">Destaque</span>
                     {% endif %}
                 </div>
                 <div>
-                    <span class="badge bg-primary">{{ news.category.name }}</span>
+                    <span class="badge badge-church-primary">{{ news.category.name }}</span>
                 </div>
             </header>
             
@@ -64,7 +64,7 @@
             
             <div class="d-flex justify-content-between">
                 <div>
-                    <a href="{% url 'news_list' church_slug=church_slug %}" class="btn btn-outline-primary">Voltar para a lista</a>
+                    <a href="{% url 'news_list' church_slug=church_slug %}" class="btn btn-outline-church-primary">Voltar para a lista</a>
                 </div>
             </div>
         </article>

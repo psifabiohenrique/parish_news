@@ -1,0 +1,56 @@
+{% extends 'news/base.html' %}
+
+{% block title %}Teste de Cores - {{ church.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Teste do Sistema de Cores</h1>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header card-header-church">
+                    <h4 class="mb-0">Cores da {{ church.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <p><strong>Cor Primária:</strong> {{ church.get_primary_color }}</p>
+                    <p><strong>Cor Secundária:</strong> {{ church.get_secondary_color }}</p>
+                    
+                    <div class="mb-3">
+                        <h5>Botões</h5>
+                        <button class="btn btn-church-primary me-2">Botão Primário</button>
+                        <button class="btn btn-outline-church-primary">Botão Outline</button>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5>Badges</h5>
+                        <span class="badge badge-church-primary me-2">Badge Primário</span>
+                        <span class="badge badge-church-secondary">Badge Secundário</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5>Links</h5>
+                        <a href="#" class="link-church-primary">Link Personalizado</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-church">
+                    <h4 class="mb-0">Exemplo de Blockquote</h4>
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote blockquote-church">
+                        <p class="mb-0">
+                            "Esta é uma mensagem de exemplo usando o estilo personalizado da paróquia."
+                        </p>
+                        <footer class="blockquote-footer mt-2">Padre Exemplo</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

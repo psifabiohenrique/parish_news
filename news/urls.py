@@ -8,4 +8,5 @@ urlpatterns = [
     path('news/<slug:slug>/', views.news_detail, name='news_detail'),
     path('priest/', views.priest, name='priest'),
     path('about/', views.about, name='about'),
+    path('test-colors/', views.test_colors, name='test_colors'),  # Página de teste das cores
 ] 

@@ -16,7 +16,7 @@
                         {% if category.description %}
                         <p class="card-text">{{ category.description }}</p>
                         {% endif %}
-                        <a href="{% url 'news_list' church_slug=church_slug %}?category={{ category.slug }}" class="btn btn-primary">Ver Notícias</a>
+                        <a href="{% url 'news_list' church_slug=church_slug %}?category={{ category.slug }}" class="btn btn-church-primary">Ver Notícias</a>
                     </div>
                 </div>
             </div>

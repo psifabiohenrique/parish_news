@@ -21,6 +21,8 @@ class Church(models.Model):
     confessions = models.TextField("Confissões e atendimentos", blank=True, null=True)
 
     website = models.URLField("Website", blank=True, null=True)
+    primary_color = models.CharField("Cor Primária", max_length=7, blank=True, null=True)
+    secondary_color = models.CharField("Cor Secundária", max_length=7, blank=True, null=True)
 
     class Meta:
         verbose_name = "Igreja"
@@ -30,6 +32,14 @@ class Church(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def get_primary_color(self):
+        """Retorna a cor primária da igreja ou uma cor padrão"""
+        return self.primary_color if self.primary_color else "#0d6efd"
+    
+    def get_secondary_color(self):
+        """Retorna a cor secundária da igreja ou uma cor padrão"""
+        return self.secondary_color if self.secondary_color else "#6c757d"
 
     def __str__(self):
         return self.name

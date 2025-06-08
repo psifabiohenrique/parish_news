@@ -5,6 +5,10 @@ from .models import News, Category
 from church.models import Church, Priest
 
 
+def index(request):
+    return render(request, "news/index.html")
+
+
 def home(request, church_slug):
     church = get_object_or_404(Church, slug=church_slug)
 
@@ -187,4 +191,14 @@ def priest(request, church_slug):
         request,
         "news/priest.html",
         {"priests": queryset, "church": church, "church_slug": church_slug},
+    )
+
+
+def test_colors(request, church_slug):
+    """View para testar as cores personalizadas"""
+    church = get_object_or_404(Church, slug=church_slug)
+    return render(
+        request,
+        "news/test_colors.html",
+        {"church": church, "church_slug": church_slug},
     )

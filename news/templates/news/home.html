@@ -9,7 +9,7 @@
     <div class="col-12 mb-5">
         <h2 class="mb-4">Destaques</h2>
         
-        <div id="featuredCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div id="featuredCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
             <div class="carousel-indicators">
                 {% for news in featured_news %}
                 <button type="button" data-bs-target="#featuredCarousel" data-bs-slide-to="{{ forloop.counter0 }}" 
@@ -27,7 +27,7 @@
                     <div class="carousel-caption d-none d-md-block" style="background-color: rgba(0,0,0,0.5); padding: 20px;">
                         <h3>{{ news.title }}</h3>
                         <p>{{ news.summary|truncatechars:150 }}</p>
-                        <a href="{% url 'news_detail' church_slug=church_slug slug=news.slug %}" class="btn btn-primary">Ler mais</a>
+                        <a href="{% url 'news_detail' church_slug=church_slug slug=news.slug %}" class="btn btn-church-primary">Ler mais</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -38,8 +38,20 @@
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Pru00f3ximo</span>
+                <span class="visually-hidden">Próximo</span>
             </button>
+            
+            <!-- Controle de Play/Pause e Efeitos -->
+            <div class="carousel-controls position-absolute" style="top: 10px; right: 10px; z-index: 10;">
+                <div class="btn-group" role="group">
+                    <button id="carouselEffect" class="btn btn-sm btn-dark bg-opacity-75" type="button" title="Alternar Efeito">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </button>
+                    <button id="carouselPlayPause" class="btn btn-sm btn-dark bg-opacity-75" type="button" title="Pausar/Reproduzir">
+                        <i id="playPauseIcon" class="bi bi-pause-fill"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     {% endif %}
@@ -64,12 +76,12 @@
                         <p class="card-text">{{ news.summary|truncatechars:150 }}</p>
                         <p class="card-text">
                             <small class="text-muted">Publicado em {{ news.published_at|date:"d/m/Y" }}</small>
-                            <span class="badge bg-primary ms-2">{{ news.category.name }}</span>
+                            <span class="badge badge-church-primary ms-2">{{ news.category.name }}</span>
                             {% if news.featured %}
-                            <span class="badge bg-success ms-1">Destaque</span>
+                            <span class="badge badge-church-secondary ms-1">Destaque</span>
                             {% endif %}
                         </p>
-                        <a href="{% url 'news_detail' church_slug=church_slug slug=news.slug %}" class="btn btn-primary btn-sm">Ler mais</a>
+                        <a href="{% url 'news_detail' church_slug=church_slug slug=news.slug %}" class="btn btn-church-primary btn-sm">Ler mais</a>
                     </div>
                 </div>
             </div>
@@ -79,20 +91,20 @@
         {% endfor %}
         
         <div class="text-center mt-4">
-            <a href="{% url 'news_list' church_slug=church_slug %}" class="btn btn-outline-primary">Ver todas as notícias</a>
+            <a href="{% url 'news_list' church_slug=church_slug %}" class="btn btn-outline-church-primary">Ver todas as notícias</a>
         </div>
     </div>
     
     <!-- Barra Lateral -->
     <div class="col-md-4">
         <div class="card mb-4">
-            <div class="card-header">Categorias</div>
+            <div class="card-header card-header-church">Categorias</div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
                     {% for category in categories %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{% url 'news_list' church_slug=church_slug %}?category={{ category.slug }}" class="text-decoration-none">{{ category.name }}</a>
-                        <span class="badge bg-primary rounded-pill">{{ category.news.count }}</span>
+                        <a href="{% url 'news_list' church_slug=church_slug %}?category={{ category.slug }}" class="text-decoration-none link-church-primary">{{ category.name }}</a>
+                        <span class="badge badge-church-primary rounded-pill">{{ category.news.count }}</span>
                     </li>
                     {% empty %}
                     <li class="list-group-item">Nenhuma categoria cadastrada.</li>
@@ -102,16 +114,422 @@
         </div>
         
         <div class="card">
-            <div class="card-header">Busca</div>
+            <div class="card-header card-header-church">Busca</div>
             <div class="card-body">
                 <form action="{% url 'news_list' church_slug=church_slug %}" method="get">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Buscar Notícias..." name="q">
-                        <button class="btn btn-primary" type="submit">Buscar</button>
+                        <button class="btn btn-church-primary" type="submit">Buscar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.getElementById('featuredCarousel');
+    const playPauseBtn = document.getElementById('carouselPlayPause');
+    const playPauseIcon = document.getElementById('playPauseIcon');
+    const effectBtn = document.getElementById('carouselEffect');
+    
+    if (carousel && playPauseBtn) {
+        const bsCarousel = new bootstrap.Carousel(carousel, {
+            interval: 5000, // 5 segundos
+            wrap: true,
+            pause: 'hover' // Pausa quando o mouse está sobre o carrossel
+        });
+        
+        let isPlaying = true;
+        let isFadeEffect = false;
+        
+        // Controle de Play/Pause
+        playPauseBtn.addEventListener('click', function() {
+            if (isPlaying) {
+                bsCarousel.pause();
+                playPauseIcon.className = 'bi bi-play-fill';
+                playPauseBtn.title = 'Reproduzir';
+                isPlaying = false;
+            } else {
+                bsCarousel.cycle();
+                playPauseIcon.className = 'bi bi-pause-fill';
+                playPauseBtn.title = 'Pausar';
+                isPlaying = true;
+            }
+        });
+        
+        // Controle de Efeito (Slide/Fade)
+        effectBtn.addEventListener('click', function() {
+            if (isFadeEffect) {
+                carousel.classList.remove('carousel-fade');
+                effectBtn.innerHTML = '<i class="bi bi-arrow-left-right"></i>';
+                effectBtn.title = 'Efeito: Slide (Clique para Fade)';
+                isFadeEffect = false;
+            } else {
+                carousel.classList.add('carousel-fade');
+                effectBtn.innerHTML = '<i class="bi bi-circle-fill"></i>';
+                effectBtn.title = 'Efeito: Fade (Clique para Slide)';
+                isFadeEffect = true;
+            }
+        });
+        
+        // Indicador visual quando o carrossel está pausado por hover
+        carousel.addEventListener('mouseenter', function() {
+            if (isPlaying) {
+                playPauseIcon.className = 'bi bi-pause-circle';
+            }
+        });
+        
+        carousel.addEventListener('mouseleave', function() {
+            if (isPlaying) {
+                playPauseIcon.className = 'bi bi-pause-fill';
+            }
+        });
+        
+        // Adiciona indicadores de progresso
+        const indicators = carousel.querySelectorAll('.carousel-indicators button');
+        let currentSlide = 0;
+        
+        // Atualiza o indicador ativo quando o slide muda
+        carousel.addEventListener('slide.bs.carousel', function(event) {
+            currentSlide = event.to;
+        });
+        
+        // Adiciona animação suave aos indicadores
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', function() {
+                bsCarousel.to(index);
+            });
+        });
+        
+        // Auto-start do carrossel
+        bsCarousel.cycle();
+        
+        // Adiciona suporte a teclado
+        document.addEventListener('keydown', function(event) {
+            if (carousel.matches(':hover') || document.activeElement === playPauseBtn || document.activeElement === effectBtn) {
+                switch(event.key) {
+                    case 'ArrowLeft':
+                        event.preventDefault();
+                        bsCarousel.prev();
+                        break;
+                    case 'ArrowRight':
+                        event.preventDefault();
+                        bsCarousel.next();
+                        break;
+                    case ' ': // Espaço
+                        event.preventDefault();
+                        playPauseBtn.click();
+                        break;
+                    case 'e':
+                    case 'E':
+                        event.preventDefault();
+                        effectBtn.click();
+                        break;
+                }
+            }
+        });
+        
+        // Adiciona barra de progresso visual
+        let progressBar = document.createElement('div');
+        progressBar.className = 'carousel-progress';
+        progressBar.innerHTML = '<div class="carousel-progress-bar"></div>';
+        carousel.appendChild(progressBar);
+        
+        let progressInterval;
+        
+        function startProgress() {
+            if (isPlaying) {
+                const progressBarElement = carousel.querySelector('.carousel-progress-bar');
+                progressBarElement.style.width = '0%';
+                progressBarElement.style.transition = 'width 5s linear';
+                
+                setTimeout(() => {
+                    if (isPlaying) {
+                        progressBarElement.style.width = '100%';
+                    }
+                }, 50);
+            }
+        }
+        
+        function resetProgress() {
+            const progressBarElement = carousel.querySelector('.carousel-progress-bar');
+            progressBarElement.style.transition = 'none';
+            progressBarElement.style.width = '0%';
+        }
+        
+        // Inicia a barra de progresso
+        startProgress();
+        
+        // Reinicia a barra de progresso a cada mudança de slide
+        carousel.addEventListener('slid.bs.carousel', function() {
+            resetProgress();
+            setTimeout(startProgress, 100);
+        });
+        
+        // Para a barra de progresso quando pausado
+        playPauseBtn.addEventListener('click', function() {
+            if (!isPlaying) {
+                resetProgress();
+            } else {
+                setTimeout(startProgress, 100);
+            }
+        });
+        
+        // Para a barra de progresso no hover
+        carousel.addEventListener('mouseenter', function() {
+            const progressBarElement = carousel.querySelector('.carousel-progress-bar');
+            progressBarElement.style.animationPlayState = 'paused';
+        });
+        
+        carousel.addEventListener('mouseleave', function() {
+            const progressBarElement = carousel.querySelector('.carousel-progress-bar');
+            progressBarElement.style.animationPlayState = 'running';
+        });
+    }
+});
+</script>
+
+<style>
+/* Estilos adicionais para o carrossel */
+.carousel-item {
+    transition: transform 0.8s ease-in-out;
+}
+
+.carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 0 3px;
+    transition: all 0.3s ease;
+}
+
+.carousel-indicators button.active {
+    transform: scale(1.2);
+}
+
+.carousel-controls {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.carousel:hover .carousel-controls {
+    opacity: 1;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.carousel:hover .carousel-control-prev,
+.carousel:hover .carousel-control-next {
+    opacity: 0.8;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1 !important;
+}
+
+/* Animação para os botões de controle */
+#carouselPlayPause,
+#carouselEffect {
+    transition: all 0.3s ease;
+    border: none;
+}
+
+#carouselPlayPause:hover,
+#carouselEffect:hover {
+    transform: scale(1.1);
+    background-color: rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Barra de progresso do carrossel */
+.carousel-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.3);
+    z-index: 6;
+}
+
+.carousel-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--church-primary-color), var(--church-secondary-color));
+    width: 0%;
+    transition: width 5s linear;
+}
+
+/* Indicador de carregamento para os slides */
+.carousel-item img {
+    transition: opacity 0.3s ease;
+}
+
+.carousel-item:not(.active) img {
+    opacity: 0.7;
+}
+
+.carousel-item.active img {
+    opacity: 1;
+}
+
+/* Melhoria na legenda do carrossel */
+.carousel-caption {
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+}
+
+/* Efeito de fade para transições mais suaves */
+.carousel-fade .carousel-item {
+    opacity: 0;
+    transition-property: opacity;
+    transform: none;
+}
+
+.carousel-fade .carousel-item.active,
+.carousel-fade .carousel-item-next.carousel-item-start,
+.carousel-fade .carousel-item-prev.carousel-item-end {
+    z-index: 1;
+    opacity: 1;
+}
+
+.carousel-fade .active.carousel-item-start,
+.carousel-fade .active.carousel-item-end {
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0s 0.8s;
+}
+
+/* Animações de entrada para as legendas */
+.carousel-item.active .carousel-caption h3 {
+    animation: slideInUp 0.8s ease-out;
+}
+
+.carousel-item.active .carousel-caption p {
+    animation: slideInUp 0.8s ease-out 0.2s both;
+}
+
+.carousel-item.active .carousel-caption .btn {
+    animation: slideInUp 0.8s ease-out 0.4s both;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .carousel-caption {
+        position: static;
+        background-color: rgba(0,0,0,0.8);
+        padding: 15px;
+        margin-top: -50px;
+        z-index: 5;
+    }
+    
+    .carousel-controls {
+        opacity: 1;
+        top: 5px;
+        right: 5px;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        opacity: 0.6;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    #carouselPlayPause,
+    #carouselEffect {
+        margin-bottom: 2px;
+    }
+}
+
+/* Indicadores personalizados */
+.carousel-indicators {
+    margin-bottom: -30px;
+    z-index: 6;
+}
+
+/* Efeito hover nos indicadores */
+.carousel-indicators button:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Animação de pulso para o botão ativo */
+.carousel-indicators button.active {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+/* Melhorias de acessibilidade */
+.carousel-control-prev:focus,
+.carousel-control-next:focus,
+#carouselPlayPause:focus,
+#carouselEffect:focus {
+    outline: 2px solid var(--church-primary-color);
+    outline-offset: 2px;
+}
+
+/* Transições suaves para todos os elementos */
+* {
+    transition: all 0.3s ease;
+}
+
+/* Efeito de zoom nas imagens */
+.carousel-item img {
+    transition: transform 8s ease-in-out;
+}
+
+.carousel-item.active img {
+    transform: scale(1.05);
+}
+
+/* Overlay gradiente para melhor legibilidade */
+.carousel-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(0,0,0,0.3), transparent, rgba(0,0,0,0.3));
+    z-index: 1;
+}
+
+.carousel-caption {
+    z-index: 2;
+}
+</style>
 {% endblock %}

@@ -7,8 +7,10 @@
     <h1 class="mb-4">Sobre a {{ church.name }}</h1>
     
     <div class="card mb-4">
+        <div class="card-header card-header-church">
+            <h2 class="card-title h4 mb-0">Nossa História</h2>
+        </div>
         <div class="card-body">
-            <h2 class="card-title h4">Nossa História</h2>
             <p class="card-text">
                 {{ church.history }}
             </p>
@@ -16,8 +18,10 @@
     </div>
 
     <div class="card mb-4">
+        <div class="card-header card-header-church">
+            <h2 class="card-title h4 mb-0">Padroeiro(a)</h2>
+        </div>
         <div class="card-body">
-            <h2 class="card-title h4">Padroeiro(a)</h2>
             <p class="card-text">
                 {{ church.patron }}
             </p>
@@ -25,8 +29,10 @@
     </div>
 
     <div class="card mb-4">
+        <div class="card-header card-header-church">
+            <h2 class="card-title h4 mb-0">Horários de Missa</h2>
+        </div>
         <div class="card-body">
-            <h2 class="card-title h4">Horários de Missa</h2>
             <p class="card-text">
                 {{ church.mass_schedule }}
             </p>
@@ -34,8 +40,10 @@
     </div>
 
     <div class="card mb-4">
+        <div class="card-header card-header-church">
+            <h2 class="card-title h4 mb-0">Confissões e Atendimentos</h2>
+        </div>
         <div class="card-body">
-            <h2 class="card-title h4">Confissões e Atendimentos</h2>
             <p class="card-text">
                 {{ church.confessions }}
             </p>
@@ -43,8 +51,10 @@
     </div>
 
     <div class="card mb-4">
+        <div class="card-header card-header-church">
+            <h2 class="card-title h4 mb-0">Localização e Contato</h2>
+        </div>
         <div class="card-body">
-            <h2 class="card-title h4">Localização e Contato</h2>
             <p class="card-text">
                 {{ church.location_contact }}
             </p>
@@ -52,8 +62,10 @@
     </div>
 
     <div class="card">
+        <div class="card-header card-header-church">
+            <h2 class="card-title h4 mb-0">Pastorais e Movimentos</h2>
+        </div>
         <div class="card-body">
-            <h2 class="card-title h4">Pastorais e Movimentos</h2>
             <div class="row">
                 <p class="card-text">
                     {{ church.pastorals_movement }}
